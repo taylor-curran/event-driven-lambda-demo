@@ -23,7 +23,7 @@ provider:
   environment:
     PREFECT_HOME: /tmp/.prefect
     PREFECT_API_KEY: prefectapikey
-    PREFECT_API_URL: 'https://api.prefect.cloud/api/accounts/c5276cbb-62a2-4501-b64a-74d3d900d781/workspaces/aaeffa0e-13fa-460e-a1f9-79b53c05ab36'
+    PREFECT_API_URL: 'https://app.prefect.cloud/account/0ff44498-d380-4d7b-bd68-9b52da03823f/workspace/f579e720-7969-4ab8-93b7-2dfa784903e6'
 
   iam:
     role:

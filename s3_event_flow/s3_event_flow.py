@@ -44,7 +44,7 @@ class TimeseriesGenerator:
 
 @flow
 def upload_timeseries_data_to_s3() -> None:
-    dict_from_block = JSON.load("max-value").value
+    dict_from_block = JSON.load("max-value-taylor").value
     max_val = dict_from_block["threshold"]
     df = TimeseriesGenerator.get_timeseries(max_value=max_val)
     result = wr.s3.to_parquet(
@@ -60,4 +60,7 @@ def upload_timeseries_data_to_s3() -> None:
 
 
 def handler(event, context):
+    upload_timeseries_data_to_s3()
+
+if __name__ == "__main__":
     upload_timeseries_data_to_s3()

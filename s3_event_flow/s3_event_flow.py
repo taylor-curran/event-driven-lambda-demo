@@ -3,8 +3,9 @@ from datetime import datetime, timedelta
 import numpy as np
 import pandas as pd
 from typing import Union
-from prefect import flow, get_run_logger
+from prefect import task, flow, get_run_logger
 from prefect.blocks.system import JSON
+from prefect_aws.s3 import S3Bucket
 
 
 class TimeseriesGenerator:
@@ -41,22 +42,37 @@ class TimeseriesGenerator:
         )
         return timeseries_df
 
+# TODO: Fix strftime so it has date now.strftime("%m/%d/%Y, %H:%M:%S")
+@task
+async def write_s3_data(df, ts_bucket_block_obj, file_name=f"ts_data_{datetime.now().strftime('%H:%M:%S')}.txt"):
+    # Convert DF to Text
+    text_df = df.to_csv(index=False)
+
+    await ts_bucket_block_obj.write_path(path=file_name, content=bytes(text_df, 'utf-8'))
+    return file_name
 
 @flow
 def upload_timeseries_data_to_s3() -> None:
     dict_from_block = JSON.load("max-value-taylor").value
     max_val = dict_from_block["threshold"]
     df = TimeseriesGenerator.get_timeseries(max_value=max_val)
-    result = wr.s3.to_parquet(
-        df,
-        path=f"s3://prefectdata/timeseries/",
-        index=False,
-        dataset=True,
-        database="default",
-        table="lambda",
-    )
+    text_df = df.to_csv(index=False)
+
+    # Load Time Series Bucket Block from Prefect Cloud
+    ts_bucket_block_obj = S3Bucket.load("taylor-timeseries-data")
+    file_name = write_s3_data(df, ts_bucket_block_obj)
+    
+    # result = wr.s3.to_parquet(
+    #     df,
+    #     path=f"s3://prefectdata/timeseries/",
+    #     index=False,
+    #     dataset=True,
+    #     database="default",
+    #     table="lambda",
+    # )
+
     logger = get_run_logger()
-    logger.info("New file uploaded: %s 🚀", result.get("paths")[0])
+    logger.info(f"New file uploaded: {file_name} 🚀")
 
 
 def handler(event, context):

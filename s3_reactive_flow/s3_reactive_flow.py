@@ -54,8 +54,8 @@ def handler(event, context):
     bucket = event["Records"][0]["s3"]["bucket"]["name"]
     key = event["Records"][0]["s3"]["object"]["key"]
     s3_path = f"s3://{bucket}/{key}"
-    validate_input_data(s3_path)
-    # create_flow_run_from_deployment()
+    #validate_input_data(s3_path)
+    # client.create_flow_run_from_deployment(deploment_id)
 
 if __name__ == "__main__":
     validate_input_data()

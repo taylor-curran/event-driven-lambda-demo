@@ -1,0 +1,38 @@
+###
+### A complete description of a Prefect Deployment for flow 'upload-timeseries-data-to-s3'
+###
+name: event_flow
+description: null
+version: 5ae8c452d90bbf0375f90abe8120abb6
+# The work queue that will handle this deployment's runs
+work_queue_name: default
+tags:
+- taylor
+- event-tut
+parameters: {}
+schedule: null
+infra_overrides: {}
+infrastructure:
+  type: process
+  env: {}
+  labels: {}
+  name: null
+  command: null
+  stream_output: true
+  block_type_slug: process
+  _block_type_slug: process
+
+###
+### DO NOT EDIT BELOW THIS LINE
+###
+flow_name: upload-timeseries-data-to-s3
+manifest_path: null
+storage: null
+path: /Users/taylorcurran/prj/demos/event-driven/event-driven-lambda-demo/s3_event_flow
+entrypoint: s3_event_flow.py:upload_timeseries_data_to_s3
+parameter_openapi_schema:
+  title: Parameters
+  type: object
+  properties: {}
+  required: null
+  definitions: null

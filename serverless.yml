@@ -65,9 +65,9 @@ functions:
       name: s3_reactive_flow
     events:
       - s3:
-          bucket: prefectdata
+          bucket: taylor-prefectdata
           event: s3:ObjectCreated:*
           rules:
             - prefix: timeseries/
-            - suffix: .snappy.parquet
+            - suffix: .txt
           existing: true
